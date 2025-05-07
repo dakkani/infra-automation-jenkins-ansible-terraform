@@ -74,13 +74,13 @@ Feel free to fork, improve, and submit a PR!
 
 ---  
 
-Made with ❤️ by [Mohammed Omer] | 🔗 [LinkedIn](https://linkedin.com/in/yourprofile)  
+Made with ❤️ by [Mohammed Omer] | 🔗 [LinkedIn](www.linkedin.com/in/mohammed-omer-180b17251)  
 
 🔹 **Happy DevOps Automation!** 🔹  
 
 ---
 
-### ✨ **Bonus Emojis** ✨  
+### ✨ **Summary** ✨  
 - 🛠️ **Tools Used**: Jenkins, Ansible, Terraform, AWS  
 - 🔄 **Automation**: CI/CD Pipeline  
 - ☁️ **Cloud**: AWS Infrastructure  
