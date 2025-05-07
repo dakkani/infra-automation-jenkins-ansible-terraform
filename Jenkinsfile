@@ -1,39 +1,48 @@
 pipeline {
     agent any
     
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+    
     stages {
-        stage('Git Checkout') {
+        stage('Checkout') {
             steps {
-                git url:  
+                git branch: 'main', 
+                     url: 'https://github.com/dakkani/challenge-jenkins-tf-ansible.git'
             }
         }
         
-        stage('Prepare SSH Key') {
+        stage('Terraform Init & Plan') {
             steps {
-                withCredentials([sshUserPrivateKey(
-                    credentialsId: 'infra-ssh-key',
-                    keyFileVariable: 'SSH_KEY'
-                )]) {
-                    sh '''
-                    mkdir -p ~/.ssh
-                    cp "$SSH_KEY" ~/.ssh/infra-key
-                    chmod 600 ~/.ssh/infra-key
-                    '''
+                dir('terraform') {
+                    sh 'terraform init'
+                    sh 'terraform plan -out=tfplan'
+                }
+            }
+        }
+        
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve tfplan'
                 }
             }
         }
         
         stage('Generate Inventory') {
             steps {
-                sh 'chmod +x scripts/generate_inventory.sh'
-                sh 'scripts/generate_inventory.sh'
+                dir('terraform') {
+                    sh 'terraform output -raw inventory > ../ansible/inventory.ini'
+                }
             }
         }
         
         stage('Run Ansible') {
             steps {
                 dir('ansible') {
-                    sh 'ansible-playbook -i inventory.ini site.yml'
+                    sh 'ansible-playbook -i inventory.ini main.yaml'
                 }
             }
         }
@@ -41,7 +50,9 @@ pipeline {
     
     post {
         always {
-            archiveArtifacts artifacts: 'ansible/inventory.ini'
+            echo 'Cleaning up workspace...'
+            archiveArtifacts artifacts: 'ansible/inventory.ini', 
+                            onlyIfSuccessful: true
             cleanWs()
         }
     }
