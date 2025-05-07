@@ -1,6 +1,6 @@
 # Configure your cloud provider (example uses AWS but adjust for your provider)
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
 
 # RedHat VM (r9.local)
