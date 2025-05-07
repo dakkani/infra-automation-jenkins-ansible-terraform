@@ -1,0 +1,29 @@
+---
+- name: Configure frontend servers
+  hosts: frontend
+  become: yes
+  vars:
+    backend_server: "{{ groups['backend'][0] }}"
+  tasks:
+    - name: Install EPEL (RedHat only)
+      yum:
+        name: epel-release
+        state: present
+      when: ansible_distribution == "RedHat"
+      
+    - name: Install NGINX
+      package:
+        name: nginx
+        state: present
+        
+    - name: Configure NGINX proxy
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify: restart nginx
+      
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

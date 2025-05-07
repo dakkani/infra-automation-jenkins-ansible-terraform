@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    
+    environment {
+        ANSIBLE_FORCE_COLOR = 'true'
+        TF_IN_AUTOMATION = 'true'
+    }
+    
+    stages {
+        stage('Terraform Init') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                }
+            }
+        }
+        
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve'
+                    sh 'terraform output -raw inventory > ../ansible/inventory.ini'
+                }
+            }
+        }
+        
+        stage('Ansible Common Config') {
+            steps {
+                dir('ansible') {
+                    sh 'ansible-playbook -i inventory.ini common.yml'
+                }
+            }
+        }
+        
+        stage('Ansible Frontend Config') {
+            steps {
+                dir('ansible') {
+                    sh 'ansible-playbook -i inventory.ini frontend.yml'
+                }
+            }
+        }
+        
+        stage('Ansible Backend Config') {
+            steps {
+                dir('ansible') {
+                    sh 'ansible-playbook -i inventory.ini backend.yml'
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            dir('terraform') {
+                sh 'terraform output'
+            }
+        }
+        cleanup {
+            // Optional: Add cleanup steps if needed
+        }
+    }
+}

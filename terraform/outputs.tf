@@ -1,0 +1,10 @@
+output "inventory" {
+  value = <<EOT
+[frontend]
+r9.local ansible_host=${aws_instance.r9.public_ip} ansible_user=ec2-user
+
+[backend]
+d12.local ansible_host=${aws_instance.d12.public_ip} ansible_user=admin
+EOT
+  sensitive = true
+}
