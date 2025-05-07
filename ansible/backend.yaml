@@ -1,0 +1,39 @@
+---
+- name: Install Netdata using the Official Repository on Debian 12
+  hosts: backend
+  become: true
+
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: true
+
+    - name: Update all packages
+      apt:
+        name: '*'
+        state: latest
+
+    - name: Install necessary dependencies
+      apt:
+        name:
+          - curl
+          - gnupg2
+          - apt-transport-https
+        state: present
+
+    - name: Install Netdata
+      apt:
+        name: netdata
+        state: present
+
+    - name: Configure Netdata
+      template:
+        src: ./netdata.conf
+        dest: /etc/netdata/netdata.conf
+      notify: restart netdata
+
+  handlers:
+    - name: restart netdata
+      service:
+        name: netdata
+        state: restarted

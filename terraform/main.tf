@@ -5,14 +5,14 @@ provider "aws" {
 
 # RedHat VM (r9.local)
 resource "aws_instance" "r9" {
-  ami           = "ami-0fe630eb857a6ec83" # RedHat 9 AMI
+  ami           = "ami-0c15e602d3d6c6c4a" # RedHat 9 AMI
   instance_type = "t2.micro"
-  key_name      = aws_key_pair.deployer.key_name
-  
+  key_name      = var.public_key
+
   tags = {
     Name = "r9.local"
   }
-  
+
   user_data = <<-EOF
               #!/bin/bash
               hostnamectl set-hostname r9.local
@@ -21,24 +21,18 @@ resource "aws_instance" "r9" {
 
 # Debian VM (d12.local)
 resource "aws_instance" "d12" {
-  ami           = "ami-0b5eea76982371e91" # Debian 12 AMI
+  ami           = "ami-0779caf41f9ba54f0" # Debian 12 AMI
   instance_type = "t2.micro"
-  key_name      = aws_key_pair.deployer.key_name
-  
+  key_name      = var.public_key
+
   tags = {
     Name = "d12.local"
   }
-  
+
   user_data = <<-EOF
               #!/bin/bash
               hostnamectl set-hostname d12.local
               EOF
-}
-
-# SSH key for VM access
-resource "aws_key_pair" "deployer" {
-  key_name   = "deployer-key"
-  public_key = var.ssh_public_key
 }
 
 # Output IP addresses for Ansible inventory

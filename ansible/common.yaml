@@ -1,0 +1,39 @@
+---
+- name: Common configuration for all Linux servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+      when: ansible_distribution == "RedHat"
+      
+    - name: Check if firewalld is installed (RedHat)
+      ansible.builtin.stat:
+        path: /usr/sbin/firewalld
+      register: firewalld_installed
+      when: ansible_distribution == "RedHat"
+      
+    - name: Stop and disable firewalld (if installed)
+      service:
+        name: firewalld
+        state: stopped
+        enabled: no
+      when: 
+        - ansible_distribution == "RedHat"
+        - firewalld_installed.stat.exists
+      
+    - name: Check if ufw is installed (Debian)
+      ansible.builtin.stat:
+        path: /usr/sbin/ufw
+      register: ufw_installed
+      when: ansible_distribution == "Debian"
+      
+    - name: Stop and disable ufw (if installed)
+      service:
+        name: ufw
+        state: stopped
+        enabled: no
+      when:
+        - ansible_distribution == "Debian"
+        - ufw_installed.stat.exists

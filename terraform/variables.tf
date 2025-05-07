@@ -1,11 +1,13 @@
 variable "r9_username" {
-  default = "admin"
+  default = "ec2-user"
 }
 
 variable "d12_username" {
   default = "admin"
 }
 
-variable "ssh_public_key" {
+variable "public_key" {
   description = "SSH public key for VM access"
+  type        = string
+  default    = "merikunji"
 }
