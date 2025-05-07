@@ -74,7 +74,7 @@ Feel free to fork, improve, and submit a PR!
 
 ---  
 
-Made with ❤️ by [Mohammed Omer] | 🔗 [LinkedIn](www.linkedin.com/in/mohammed-omer-180b17251)  
+Made with ❤️ by [Mohammed Omer] | 🔗 [LinkedIn](https://www.linkedin.com/in/mohammed-omer-180b17251)  
 
 🔹 **Happy DevOps Automation!** 🔹  
 
