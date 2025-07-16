@@ -16,7 +16,7 @@ Before using this project, ensure you have the following:
 
 1. **Fork this repository** and clone it locally.  
    ```bash
-   git clone https://github.com/your-username/devops-automation.git
+   git clone https://github.com/dakkani/infra-automation-jenkins-ansible-terraform.git
    ```
    
 2. **Update the PEM Key** in the repository with your own AWS key pair.  
@@ -75,8 +75,6 @@ Feel free to fork, improve, and submit a PR!
 ---  
 
 Made with ❤️ by [Mohammed Omer] | 🔗 [LinkedIn](https://www.linkedin.com/in/mohammed-omer-180b17251)  
-
-🔹 **Happy DevOps Automation!** 🔹  
 
 ---
 
